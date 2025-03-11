@@ -1,5 +1,5 @@
 import conf from "../conf/conf";
-import { Client, Databases, Storage, Query } from "appwrite";
+import { Client, Databases, Storage, Query, ID } from "appwrite";
 
 interface createPostType {
   title: string;
@@ -123,6 +123,41 @@ export class Service {
       console.log("Appwrite getPosts Error : ", error);
       return false;
     }
+  }
+
+  // file upload service
+
+  async uploadFile(file: any) {
+    try {
+      const response = await this.bucket.createFile(
+        conf.appwriteBucketId,
+        ID.unique(),
+        file
+      );
+      return response;
+    } catch (error) {
+      console.log("Appwrite uploadFile Error : ", error);
+      return false;
+    }
+  }
+
+  async deleteFile(fileId: string) {
+    try {
+      const response = await this.bucket.deleteFile(
+        conf.appwriteBucketId,
+        fileId
+      );
+      console.log("File deleted:", response);
+      return true;
+    } catch (error) {
+      console.log("Appwrite deleteFile Error : ", error);
+      return false;
+    }
+  }
+
+  getFilePreview(fileId: string) {
+    const response = this.bucket.getFilePreview(conf.appwriteBucketId, fileId);
+    return response;
   }
 }
 
