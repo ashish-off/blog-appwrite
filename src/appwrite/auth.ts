@@ -70,7 +70,6 @@ export class Authservice {
       console.error("Appwrite getCurrentUser Error : ", error);
       throw error;
     }
-    return null;
   }
 
   async logout() {
