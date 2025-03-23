@@ -3,7 +3,7 @@ import { login as authLogin } from "../features/authSlice";
 import { Button, Input, Logo } from "./index";
 import authservice from "../appwrite/auth";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 const Login = () => {
@@ -23,11 +23,31 @@ const Login = () => {
         navigate("/");
       }
     } catch (error) {
-      setError(error.message);
+      setError((error as Error).message);
     }
   };
 
-  return <div>Login</div>;
+  return (
+    <div
+      className="flex items-center justify-center w-full"
+    >
+      
+        <div className="mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10 ">
+        <div className="mb-2 flex justify-center">
+          <span className="inline-block w-full max-w-[100px]">
+            <Logo width="100%" />
+          </span>
+        </div>
+        <h2 className="text-center text-2xl font-bold leading-tight">Sign in to your account</h2>
+        <p className="mt-2 text-center text-base text-black/60">
+        Don&apos;t have an account?&nbsp;
+        <Link to={"/signup"}
+        className="font-medium transition-all duration-200 hover:underline  ">Sign up</Link>
+        </p>
+        {error && <p className="text-red-600 text-center mt-8">{error}</p>}
+        </div>
+    </div>
+  );
 };
 
 export default Login;
