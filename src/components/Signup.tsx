@@ -2,12 +2,12 @@ import React from "react";
 import authservice from "../appwrite/auth";
 import { data, Link, useNavigate } from "react-router-dom";
 import { login } from "../features/authSlice";
-import { Button, Logo } from "./index";
+import { Button, Input, Logo } from "./index";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
 const Signup = () => {
-  const nevigate = useNavigate();
+  const navigate = useNavigate();
   const [error, setError] = React.useState<string | null>("");
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
@@ -21,7 +21,7 @@ const Signup = () => {
       if (userData) {
         const userData = await authservice.getCurrentUser();
         if (userData) dispatch(login(userData));
-        nevigate("/");
+        navigate("/");
       }
     } catch (error) {
       setError(
@@ -53,6 +53,43 @@ const Signup = () => {
           </Link>
         </p>
         {error && <p className="text-red-600 text-center mt-8">{error}</p>}
+
+        <form onSubmit={handleSubmit(create)}>
+          <div className="space-y-3">
+            <Input
+              label="Name :"
+              type="text"
+              {...register("name", { required: true })}
+            />
+
+            <Input
+              label="Email :"
+              placeholder="Enter your email"
+              type="email"
+              {...register("email", {
+                required: true,
+                validate: {
+                  matchPattern: (value) =>
+                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ||
+                    "Please enter a valid email address",
+                },
+              })}
+            />
+
+            <Input
+              label="Password :"
+              placeholder="Enter your password"
+              type="password"
+              {...register("password", {
+                required: true,
+              })}
+            />
+
+            <Button type="submit" className="w-full">
+              Create Account
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );
